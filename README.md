@@ -1,7 +1,7 @@
 # android-storage
 
-a united storage api interface implemented by [MMKV](https://github.com/tencent/mmkv)
-and [DiskLruCache](https://github.com/JakeWharton/DiskLruCache) for Android Development.
+A united storage api interface for Android Development. by now the has two implementations which are [MMKV](https://github.com/tencent/mmkv)
+and [DiskLruCache](https://github.com/JakeWharton/DiskLruCache).
 
 installation:
 
