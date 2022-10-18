@@ -1,6 +1,7 @@
 package com.android.sdk.cache.mmkv;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -14,23 +15,21 @@ import timber.log.Timber;
 
 /**
  * @author Ztiany
- * Email: ztiany3@gmail.com
- * Date : 2018-11-01 11:25
  */
 @SuppressWarnings("WeakerAccess,unused")
-public class MMKVStorageImpl extends BaseStorage {
+class MMKVStorage extends BaseStorage {
 
-    private static final String TAG = MMKVStorageImpl.class.getSimpleName();
+    private static final String TAG = MMKVStorage.class.getSimpleName();
 
     private static final AtomicBoolean INITIALIZED = new AtomicBoolean(false);
 
     private final MMKV mMmkv;
 
-    public MMKVStorageImpl(Context context, String mmkvId) {
+    public MMKVStorage(Context context, String mmkvId) {
         this(context, mmkvId, false);
     }
 
-    public MMKVStorageImpl(Context context, String mmkvId, boolean multiProcess) {
+    public MMKVStorage(Context context, String mmkvId, boolean multiProcess) {
 
         if (INITIALIZED.compareAndSet(false, true)) {
             String rootDir = MMKV.initialize(context.getApplicationContext());
@@ -52,6 +51,12 @@ public class MMKVStorageImpl extends BaseStorage {
         } catch (Error error) {
             error.printStackTrace();
         }
+    }
+
+    @Override
+    public SharedPreferences.Editor edit() {
+        Timber.w("MMKV doesn't support editor.");
+        return mMmkv.edit();
     }
 
     @NonNull

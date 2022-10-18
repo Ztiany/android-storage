@@ -1,6 +1,8 @@
 package com.android.sdk.cache;
 
 
+import android.content.SharedPreferences;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
@@ -28,6 +30,8 @@ public interface Storage {
     void putEntity(@NonNull String key, @Nullable Object entity, long cacheTime);
 
     void putEntity(@NonNull String key, @Nullable Object entity);
+
+    SharedPreferences.Editor edit();
 
     ///////////////////////////////////////////////////////////////////////////
     // Getting

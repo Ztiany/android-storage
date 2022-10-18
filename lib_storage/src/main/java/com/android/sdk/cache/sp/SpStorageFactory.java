@@ -1,33 +1,33 @@
-package com.android.sdk.cache.disklru;
+package com.android.sdk.cache.sp;
 
 import android.content.Context;
 
-import com.android.sdk.cache.encryption.EncipherStorage;
 import com.android.sdk.cache.Storage;
 import com.android.sdk.cache.StorageFactory;
+import com.android.sdk.cache.encryption.EncipherStorage;
 
 import timber.log.Timber;
 
 /**
  * @author Ztiany
  */
-public class DiskLruStorageFactoryImpl implements StorageFactory {
+public class SpStorageFactory implements StorageFactory {
 
     @Override
     public Builder newBuilder(Context context) {
-        return new DiskLruStorageBuilder(context);
+        return new SpStorageFactoryBuilder(context);
     }
 
-    public static class DiskLruStorageBuilder extends Builder {
+    public static class SpStorageFactoryBuilder extends Builder {
 
-        DiskLruStorageBuilder(Context context) {
+        SpStorageFactoryBuilder(Context context) {
             super(context);
         }
 
         @Override
         public Builder enableMultiProcess(boolean multiProcess) {
             if (multiProcess) {
-                Timber.d("DiskLruStorage was initialized, but do not support multi process");
+                Timber.w("SpStorage was initialized, but the parameter [multiProcess] is ignored.");
             }
             super.enableMultiProcess(multiProcess);
             return this;
@@ -35,7 +35,7 @@ public class DiskLruStorageFactoryImpl implements StorageFactory {
 
         @Override
         public Storage build() {
-            DiskLruStorageImpl diskLruStorage = new DiskLruStorageImpl(context, storageId);
+            SpStorage diskLruStorage = new SpStorage(context, storageId, commitImmediately);
             if (encipher != null) {
                 return new EncipherStorage(diskLruStorage, encipher);
             }

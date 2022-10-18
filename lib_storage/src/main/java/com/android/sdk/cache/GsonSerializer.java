@@ -1,7 +1,8 @@
-package com.android.sdk.cache.json;
+package com.android.sdk.cache;
 
 import android.net.Uri;
 
+import com.android.sdk.cache.json.Serializer;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializationContext;
@@ -18,10 +19,8 @@ import timber.log.Timber;
 
 /**
  * @author Ztiany
- * Email: ztiany3@gmail.com
- * Date : 2020-03-20 17:23
  */
-public class JsonSerializer implements Serializer {
+class GsonSerializer implements Serializer {
 
     private final Gson GSON = new GsonBuilder()
             .excludeFieldsWithModifiers(Modifier.TRANSIENT)

@@ -6,10 +6,12 @@ import com.android.sdk.cache.encryption.EncipherStorage;
 import com.android.sdk.cache.Storage;
 import com.android.sdk.cache.StorageFactory;
 
+import timber.log.Timber;
+
 /**
  * @author Ztiany
  */
-public class MMKVStorageFactoryImpl implements StorageFactory {
+public class MMKVStorageFactory implements StorageFactory {
 
     @Override
     public Builder newBuilder(Context context) {
@@ -23,8 +25,16 @@ public class MMKVStorageFactoryImpl implements StorageFactory {
         }
 
         @Override
+        public Builder commitImmediately(boolean commitImmediately) {
+            if (commitImmediately) {
+                Timber.w("MMKVStorage was initialized, but the parameter [commitImmediately] is ignored.");
+            }
+            return super.commitImmediately(commitImmediately);
+        }
+
+        @Override
         public Storage build() {
-            MMKVStorageImpl mmkvStorage = new MMKVStorageImpl(context, storageId, multiProcess);
+            MMKVStorage mmkvStorage = new MMKVStorage(context, storageId, multiProcess);
             if (encipher != null) {
                 return new EncipherStorage(mmkvStorage, encipher);
             }
