@@ -1,17 +1,15 @@
 buildscript {
     repositories {
-        mavenCentral()
-        google()
         maven { url "https://maven.aliyun.com/repository/gradle-plugin" }
         maven { url "https://maven.aliyun.com/repository/google" }
         maven { url "https://dl.google.com/dl/android/maven2/" }
-        maven { url "https://jitpack.io" }
-        maven { url "https://kotlin.bintray.com/kotlinx" }
+        mavenCentral()
+        google()
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.0.4'
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.0"
+        classpath 'com.android.tools.build:gradle:7.2.2'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.9.23"
         classpath 'com.vanniktech:gradle-maven-publish-plugin:0.18.0'
     }
 }
@@ -26,8 +24,6 @@ allprojects {
         maven { url "https://maven.aliyun.com/repository/google" }
         maven { url "https://dl.google.com/dl/android/maven2/" }
         maven { url "https://www.jitpack.io" }
-        maven { url "https://kotlin.bintray.com/kotlinx" }
-        maven { url "https://dl.bintray.com/umsdk/release" }
     }
 
     plugins.withId("com.vanniktech.maven.publish") {
@@ -38,6 +34,6 @@ allprojects {
 
 }
 
-task clean(type: Delete) {
+tasks.register('clean', Delete) {
     delete rootProject.buildDir
 }

@@ -5,13 +5,14 @@ import android.content.SharedPreferences;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.android.sdk.cache.Storage;
 import com.android.sdk.cache.BaseStorage;
+import com.android.sdk.cache.OnValueChangedListener;
+import com.android.sdk.cache.Storage;
+
+import java.util.Set;
 
 /**
  * @author Ztiany
- * Email: ztiany3@gmail.com
- * Date : 2020-03-20 17:32
  */
 public class EncipherStorage extends BaseStorage {
 
@@ -23,14 +24,34 @@ public class EncipherStorage extends BaseStorage {
         mEncipher = encipher;
     }
 
+    ///////////////////////////////////////////////////////////////////////////
+    // get
+    ///////////////////////////////////////////////////////////////////////////
+
     @Override
-    public void putString(@NonNull String key, @Nullable String value) {
-        mStorage.putString(key, mEncipher.encrypt(value));
+    public int getInt(@NonNull String key, int defaultValue) {
+        return mStorage.getInt(key, defaultValue);
     }
 
     @Override
-    public SharedPreferences.Editor edit() {
-        return mStorage.edit();
+    public long getLong(@NonNull String key, long defaultValue) {
+        return mStorage.getLong(key, defaultValue);
+    }
+
+    @Override
+    public float getFloat(@NonNull String key, float defaultValue) {
+        return mStorage.getFloat(key, defaultValue);
+    }
+
+    @Override
+    public boolean getBoolean(@NonNull String key, boolean defaultValue) {
+        return mStorage.getBoolean(key, defaultValue);
+    }
+
+    @Nullable
+    @Override
+    public String getString(@NonNull String key) {
+        return mEncipher.decrypt(mStorage.getString(key));
     }
 
     @NonNull
@@ -41,8 +62,23 @@ public class EncipherStorage extends BaseStorage {
 
     @Nullable
     @Override
-    public String getString(@NonNull String key) {
-        return mEncipher.decrypt(mStorage.getString(key));
+    public Set<String> getStringSet(@NonNull String key) {
+        return mStorage.getStringSet(key);
+    }
+
+    @NonNull
+    @Override
+    public Set<String> getStringSet(@NonNull String key, @NonNull Set<String> defaultValue) {
+        return mStorage.getStringSet(key, defaultValue);
+    }
+
+    ///////////////////////////////////////////////////////////////////////////
+    // put
+    ///////////////////////////////////////////////////////////////////////////
+
+    @Override
+    public void putInt(@NonNull String key, int value) {
+        mStorage.putInt(key, value);
     }
 
     @Override
@@ -51,18 +87,8 @@ public class EncipherStorage extends BaseStorage {
     }
 
     @Override
-    public long getLong(@NonNull String key, long defaultValue) {
-        return mStorage.getLong(key, defaultValue);
-    }
-
-    @Override
-    public void putInt(@NonNull String key, int value) {
-        mStorage.putInt(key, value);
-    }
-
-    @Override
-    public int getInt(@NonNull String key, int defaultValue) {
-        return mStorage.getInt(key, defaultValue);
+    public void putFloat(@NonNull String key, float value) {
+        mStorage.putFloat(key, value);
     }
 
     @Override
@@ -71,9 +97,18 @@ public class EncipherStorage extends BaseStorage {
     }
 
     @Override
-    public boolean getBoolean(@NonNull String key, boolean defaultValue) {
-        return mStorage.getBoolean(key, defaultValue);
+    public void putString(@NonNull String key, @Nullable String value) {
+        mStorage.putString(key, mEncipher.encrypt(value));
     }
+
+    @Override
+    public void putStringSet(@NonNull String key, @Nullable Set<String> value) {
+        mStorage.putStringSet(key, value);
+    }
+
+    ///////////////////////////////////////////////////////////////////////////
+    // other
+    ///////////////////////////////////////////////////////////////////////////
 
     @Override
     public void remove(@NonNull String key) {
@@ -83,6 +118,21 @@ public class EncipherStorage extends BaseStorage {
     @Override
     public void clearAll() {
         mStorage.clearAll();
+    }
+
+    @Override
+    public SharedPreferences.Editor edit() {
+        return mStorage.edit();
+    }
+
+    @Override
+    public void addOnValueChangedListener(OnValueChangedListener listener) {
+        mStorage.addOnValueChangedListener(listener);
+    }
+
+    @Override
+    public void removeOnValueChangedListener(OnValueChangedListener listener) {
+        mStorage.removeOnValueChangedListener(listener);
     }
 
 }

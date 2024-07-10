@@ -4,8 +4,6 @@ import androidx.annotation.Nullable;
 
 /**
  * @author Ztiany
- * Email: ztiany3@gmail.com
- * Date : 2020-03-20 16:51
  */
 public interface Encipher {
 

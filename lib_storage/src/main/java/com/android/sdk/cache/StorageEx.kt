@@ -10,13 +10,13 @@ inline fun <reified T : Any> Storage.getEntity(key: String, defaultValue: T): T 
     return this.getEntity(key, object : TypeFlag<T>() {}.type, defaultValue)
 }
 
-fun Storage.commit(editing: Editor.() -> Unit) {
+fun Storage.commitEditing(editing: Editor.() -> Unit) {
     val edit = edit()
     edit.editing()
     edit.commit()
 }
 
-fun Storage.apply(editing: Editor.() -> Unit) {
+fun Storage.applyEditing(editing: Editor.() -> Unit) {
     val edit = edit()
     edit.editing()
     edit.apply()

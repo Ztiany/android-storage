@@ -5,9 +5,7 @@ import com.google.gson.internal.$Gson$Types;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
-/**
- * @param <T> 类型标记
- */
+
 public abstract class TypeFlag<T> {
 
     private final Class<? super T> rawType;
@@ -19,13 +17,13 @@ public abstract class TypeFlag<T> {
         this.rawType = (Class<? super T>) $Gson$Types.getRawType(type);
     }
 
-    @SuppressWarnings("all")
     private static Type getSuperclassTypeParameter(Class<?> subclass) {
         Type superclass = subclass.getGenericSuperclass();
         if (superclass instanceof Class) {
             throw new RuntimeException("Missing type parameter.");
         }
         ParameterizedType parameterized = (ParameterizedType) superclass;
+        assert parameterized != null;
         return $Gson$Types.canonicalize(parameterized.getActualTypeArguments()[0]);
     }
 

@@ -24,35 +24,36 @@ public interface StorageFactory {
         }
 
         /**
-         * 是否允许跨进程访问存储
+         * Note: SP does not support multi-process.
          */
         public Builder enableMultiProcess(boolean multiProcess) {
             this.multiProcess = multiProcess;
             return this;
         }
 
-        /**
-         * @param storageId 存储标识
-         */
         public Builder storageId(String storageId) {
             this.storageId = storageId;
             return this;
         }
 
         /**
-         * @param encipher 数据加密接口
+         * @param encipher if you want to encrypt the data. Note: only String or Entity type can be encrypted.
          */
         public Builder encipher(Encipher encipher) {
             this.encipher = encipher;
             return this;
         }
 
+        /**
+         * if set to true, the data will be synchronized to the disk immediately after each operation.
+         */
         public Builder commitImmediately(boolean commitImmediately) {
             this.commitImmediately = commitImmediately;
             return this;
         }
 
         public abstract Storage build();
+
     }
 
 }

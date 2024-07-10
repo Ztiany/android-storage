@@ -4,14 +4,12 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.text.TextUtils;
 
-import timber.log.Timber;
+import java.util.Set;
 
-/**
- * modified from <a href='https://github.com/hongyangAndroid/SpCache'>hongyangAndroid/SpCache</a>.
- */
 class SpCache {
 
     private final SharedPreferences mSharedPreferences;
+
     private final boolean mCommitImmediately;
 
     public SpCache(Context context, String prefFileName, boolean commitImmediately) {
@@ -22,95 +20,92 @@ class SpCache {
         mCommitImmediately = commitImmediately;
     }
 
-    //put
-    public SpCache putInt(String key, int val) {
-        return put(key, val);
+    ///////////////////////////////////////////////////////////////////////////
+    // put
+    ///////////////////////////////////////////////////////////////////////////
+
+    public void putInt(String key, int val) {
+        SharedPreferences.Editor edit = mSharedPreferences.edit();
+        edit.putInt(key, val);
+        apply(edit);
     }
 
-    public SpCache putLong(String key, long val) {
-        return put(key, val);
+    public void putLong(String key, long val) {
+        SharedPreferences.Editor edit = mSharedPreferences.edit();
+        edit.putLong(key, val);
+        apply(edit);
     }
 
-    public SpCache putString(String key, String val) {
-        return put(key, val);
+    public void putString(String key, String val) {
+        SharedPreferences.Editor edit = mSharedPreferences.edit();
+        edit.putString(key, val);
+        apply(edit);
     }
 
-    public SpCache putBoolean(String key, boolean val) {
-        return put(key, val);
+    public void putBoolean(String key, boolean val) {
+        SharedPreferences.Editor edit = mSharedPreferences.edit();
+        edit.putBoolean(key, val);
+        apply(edit);
     }
 
-    public SpCache putFloat(String key, float val) {
-        return put(key, val);
+    public void putFloat(String key, float val) {
+        SharedPreferences.Editor edit = mSharedPreferences.edit();
+        edit.putFloat(key, val);
+        apply(edit);
     }
 
-    //get
+    public void putStringSet(String key, Set<String> val) {
+        SharedPreferences.Editor edit = mSharedPreferences.edit();
+        edit.putStringSet(key, val);
+        apply(edit);
+    }
+
+    ///////////////////////////////////////////////////////////////////////////
+    // get
+    ///////////////////////////////////////////////////////////////////////////
+
     public int getInt(String key, int defaultVal) {
-        return (int) (get(key, defaultVal));
+        return mSharedPreferences.getInt(key, defaultVal);
     }
 
     public long getLong(String key, long defaultVal) {
-        return (long) (get(key, defaultVal));
+        return mSharedPreferences.getLong(key, defaultVal);
     }
 
     public String getString(String key, String defaultVal) {
-        return (String) (get(key, defaultVal));
+        return mSharedPreferences.getString(key, defaultVal);
     }
 
     public boolean getBoolean(String key, boolean defaultVal) {
-        return (boolean) (get(key, defaultVal));
+        return mSharedPreferences.getBoolean(key, defaultVal);
     }
 
     public float getFloat(String key, float defaultVal) {
-        return (float) (get(key, defaultVal));
+        return mSharedPreferences.getFloat(key, defaultVal);
     }
 
-    //contains
+    public Set<String> getStringSet(String key, Set<String> defaultValue) {
+        return mSharedPreferences.getStringSet(key, defaultValue);
+    }
+
+    ///////////////////////////////////////////////////////////////////////////
+    // other
+    ///////////////////////////////////////////////////////////////////////////
+
     public boolean contains(String key) {
-        return getSharedPreferences().contains(key);
+        return mSharedPreferences.contains(key);
     }
 
-    //remove
-    public SpCache remove(String key) {
-        return _remove(key);
-    }
-
-    private SpCache _remove(String key) {
-        SharedPreferences.Editor editor = getSharedPreferences().edit();
+    public void remove(String key) {
+        SharedPreferences.Editor editor = mSharedPreferences.edit();
         editor.remove(key);
         apply(editor);
-        return this;
     }
 
-    //clear
-    public SpCache clear() {
-        return _clear();
-    }
-
-    private SpCache _clear() {
-        SharedPreferences.Editor editor = getSharedPreferences().edit();
+    public void clear() {
+        SharedPreferences.Editor editor = mSharedPreferences.edit();
         editor.clear();
         apply(editor);
-        return this;
-    }
-
-    private <T> SpCache put(String key, T t) {
-        SharedPreferences.Editor editor = getSharedPreferences().edit();
-        if (t instanceof String) {
-            editor.putString(key, (String) t);
-        } else if (t instanceof Integer) {
-            editor.putInt(key, (Integer) t);
-        } else if (t instanceof Boolean) {
-            editor.putBoolean(key, (Boolean) t);
-        } else if (t instanceof Float) {
-            editor.putFloat(key, (Float) t);
-        } else if (t instanceof Long) {
-            editor.putLong(key, (Long) t);
-        } else {
-            Timber.d("you may be put a invalid object :%s", t.toString());
-            editor.putString(key, t.toString());
-        }
-        apply(editor);
-        return this;
     }
 
     private void apply(SharedPreferences.Editor editor) {
@@ -121,43 +116,16 @@ class SpCache {
         }
     }
 
-    private Object readDisk(String key, Object defaultObject) {
-        Timber.e("readDisk");
-        SharedPreferences sp = getSharedPreferences();
-
-        if (defaultObject instanceof String) {
-            return sp.getString(key, (String) defaultObject);
-        } else if (defaultObject instanceof Integer) {
-            return sp.getInt(key, (Integer) defaultObject);
-        } else if (defaultObject instanceof Boolean) {
-            return sp.getBoolean(key, (Boolean) defaultObject);
-        } else if (defaultObject instanceof Float) {
-            return sp.getFloat(key, (Float) defaultObject);
-        } else if (defaultObject instanceof Long) {
-            return sp.getLong(key, (Long) defaultObject);
-        }
-        Timber.e("you can not read object , which class is %s", defaultObject.getClass().getSimpleName());
-        return null;
-    }
-
-    private Object get(String key, Object defaultVal) {
-        return readDisk(key, defaultVal);
-    }
-
-    private SharedPreferences getSharedPreferences() {
-        return mSharedPreferences;
-    }
-
     public SharedPreferences.Editor edit() {
-        return getSharedPreferences().edit();
+        return mSharedPreferences.edit();
     }
 
     public void registerOnSharedPreferenceChangeListener(SharedPreferences.OnSharedPreferenceChangeListener listener) {
-        getSharedPreferences().registerOnSharedPreferenceChangeListener(listener);
+        mSharedPreferences.registerOnSharedPreferenceChangeListener(listener);
     }
 
     public void unregisterOnSharedPreferenceChangeListener(SharedPreferences.OnSharedPreferenceChangeListener listener) {
-        getSharedPreferences().unregisterOnSharedPreferenceChangeListener(listener);
+        mSharedPreferences.unregisterOnSharedPreferenceChangeListener(listener);
     }
 
 }

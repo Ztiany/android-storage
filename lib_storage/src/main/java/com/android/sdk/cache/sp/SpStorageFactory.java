@@ -35,11 +35,11 @@ public class SpStorageFactory implements StorageFactory {
 
         @Override
         public Storage build() {
-            SpStorage diskLruStorage = new SpStorage(context, storageId, commitImmediately);
+            SpStorage storage = new SpStorage(context, storageId, commitImmediately);
             if (encipher != null) {
-                return new EncipherStorage(diskLruStorage, encipher);
+                return new EncipherStorage(storage, encipher);
             }
-            return diskLruStorage;
+            return storage;
         }
 
     }

@@ -32,7 +32,7 @@ public class StorageContext {
     /**
      * @param type {@link #MMKV} or {@link  #SP}.
      */
-    public static StorageFactory newStorageFactory(String type) {
+    public static StorageFactory newStorageFactory(@StorageType String type) {
         if (MMKV.equals(type)) {
             return new MMKVStorageFactory();
         } else if (SP.equals(type)) {
