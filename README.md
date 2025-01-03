@@ -7,5 +7,5 @@ and [SharedPreferences](https://developer.android.com/reference/android/content/
 installation:
 
 ```groovy
-implementation "com.github.Ztiany:android-storage:1.0.4"
+implementation "io.github.ztiany:android-storage:2.0.0"
 ```
